@@ -1,12 +1,45 @@
-<%# bootstrap_formを使ったフォームでは、form_withの代わりにbootstrap_form_withを使う %>
-<%# バリデーションエラーの表示はbootstrap_formが用意してくれるので、自前で用意する必要がなくなる %>
-<%= bootstrap_form_with(model: cat) do |form| %>
+<%# 全体を`turbo_frame_tag`で囲う %>
+<%# 編集リンクをクリックすると、_cat.html.erbの<turbo-frame>部分がこの部分に置換される %>
+<%= turbo_frame_tag cat do %>
+  <%= bootstrap_form_with(model: cat) do |form| %>
+    <div class="row py-2 border-top">
+      <div class="col-4">
 
- <%# ラベルはbootstrap_formが用意してくれるので、自前で用意する必要がなくなる %>
- <%# Bootstrapのclass属性もbootstrap_formが設定してくれるので、自前で用意する必要はない %>
- <%= form.text_field :name %>
- <%= form.number_field :age %>
+        <%# _cat.html.erbの見た目に合うように、フォームの見た目を修正する %>
+        <%# オプションはbootstrap_formのもので、詳細は以下の通り %>
+        <%# skip_label: ラベルは不要 %>
+        <%# label_as_placeholder: ラベルをプレースホルダーとして使う %>
+        <%# wrapper: <div>ラッパーは不要 %>
+        <%# control_class: コントロールのclass属性を指定 %>
+        <%= form.text_field :name,
+                            skip_label: true,
+                            label_as_placeholder: true,
+                            wrapper: false,
+                            control_class: "form-control form-control-sm"
+        %>
+      </div>
+      <div class="col-4">
+        <%= form.number_field :age,
+                              skip_label: true,
+                              label_as_placeholder: true,
+                              wrapper: false,
+                              control_class: "form-control form-control-sm"
+        %>
+      </div>
 
- <%# Bootstrapのprimary色のsubmitボタン %>
- <%= form.primary %>
+      <div class="col-4">
+        <div class="d-flex justify-content-end">
+          <%= form.primary class: "btn btn-primary btn-sm me-2" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
 <% end %>
+
+<%# 注目ポイントはturbo_frame_tagの引数にcatを利用してる点だよ。
+これでshow.html.erbの<turbo-frame id="cat_1">とedit.html.erb（内でrenderしている_form.html.erb）の<turbo-frame id="cat_1">がマッチするようになる。
+つまり編集リンクをクリックすると、_cat.html.erbの<turbo-frame id="cat_1">部分が、_form.html.erbの<turbo-frame id="cat_1">部分に置換されるようになるよ。 %>
+
+<%# _form.htm.erbはedit.html.erbからrenderされているよ。
+実際には編集リンクのクリック時にedit.html.erbのレンダリング結果がレスポンスされるけど、
+<turbo-frame>で囲われた_form.htm.erb部分だけが利用されるよ。 %>
