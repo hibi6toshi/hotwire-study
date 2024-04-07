@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :hedgehogs
   resources :chicks
   resources :dogs
   resources :cats
