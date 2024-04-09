@@ -29,7 +29,8 @@ class CatsController < ApplicationController
     @cat = Cat.new(cat_params)
 
     if @cat.save
-      redirect_to @cat, notice: "ねこを登録しました。"
+      # 暗黙的に create.turbo_stream.erbのrenderが実行される。
+      flash.now.notice = 'ねこを登録しました。'
     else
       render :new, status: :unprocessable_entity
     end
@@ -38,7 +39,12 @@ class CatsController < ApplicationController
   # PATCH/PUT /cats/1
   def update
     if @cat.update(cat_params)
-      redirect_to @cat, notice: "ねこを更新しました。", status: :see_other
+      # リダイレクトを削除（リダイレクトがないと暗黙的に`render`が実行される）
+      # redirect_to @cat, notice: "ねこを更新しました。", status: :see_other
+
+      # Flashは通常だとリダイレクト時に使うのでflash.noticeを使って設定する。
+      # でもTurbo Streamsでは今回のリクエストに対してFlashを設定したい。そういう場合には今回のリクエストに対してだけ有効なflash.now.noticeを利用するよ。
+      flash.now.notice = 'ねこを更新しました。'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -47,7 +53,8 @@ class CatsController < ApplicationController
   # DELETE /cats/1
   def destroy
     @cat.destroy!
-    redirect_to cats_url, notice: "ねこを削除しました。", status: :see_other
+    # 暗黙的に render destroy.turbo_stream.erb　をしている。
+    flash.now.notice = 'ねこを削除しました。'
   end
 
   private
