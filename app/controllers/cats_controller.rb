@@ -41,6 +41,9 @@ class CatsController < ApplicationController
       # リダイレクトを削除（リダイレクトがないと暗黙的に`render`が実行される）
       # redirect_to @cat, notice: "ねこを更新しました。", status: :see_other
 
+      # Flashは通常だとリダイレクト時に使うのでflash.noticeを使って設定する。
+      # でもTurbo Streamsでは今回のリクエストに対してFlashを設定したい。そういう場合には今回のリクエストに対してだけ有効なflash.now.noticeを利用するよ。
+      flash.now.notice = 'ねこを更新しました。'
     else
       render :edit, status: :unprocessable_entity
     end

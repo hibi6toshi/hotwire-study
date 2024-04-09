@@ -16,3 +16,7 @@ module ApplicationHelper
     tag.span(icon(icon_name), class: "me-2") + tag.span(text)
   end
 end
+
+def turbo_stream_flash
+  turbo_stream.update 'flash', partial: 'flash'
+end
