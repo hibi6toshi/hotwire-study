@@ -58,8 +58,9 @@
       </div>
       <%# 登録リンククリック時に、cats#new の新規登録フォーム部分をここに置換する %>
       <%= turbo_frame_tag "new_cat" %>
-      <%= render @cats %>
-
+        <div id='cats'>
+          <%= render @cats %>
+        </div>
       <div class="d-flex justify-content-end mt-3">
         <%= paginate @cats %>
       </div>

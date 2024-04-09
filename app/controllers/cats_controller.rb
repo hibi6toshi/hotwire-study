@@ -29,7 +29,8 @@ class CatsController < ApplicationController
     @cat = Cat.new(cat_params)
 
     if @cat.save
-      redirect_to @cat, notice: "ねこを登録しました。"
+      # 暗黙的に create.turbo_stream.erbのrenderが実行される。
+      flash.now.notice = 'ねこを登録しました。'
     else
       render :new, status: :unprocessable_entity
     end
